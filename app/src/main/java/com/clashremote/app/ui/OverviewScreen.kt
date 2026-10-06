@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,10 @@ import com.clashremote.core.*
                         Metric("↑ 上传速率", "${bytes(state.traffic.up)}/s", Modifier.weight(1f))
                     }
                     TrafficChart(state.trafficHistory)
+                    Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                        Text("↓ 下载", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                        Text("↑ 上传（虚线）", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                    }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Metric("累计下载", bytes(state.snapshot.downloadTotal), Modifier.weight(1f))
                         Metric("累计上传", bytes(state.snapshot.uploadTotal), Modifier.weight(1f))
@@ -91,7 +96,8 @@ import com.clashremote.core.*
                     val y = size.height - size.height * (if (upload) sample.up else sample.down).coerceAtLeast(0) / maximum
                     if (index == 0) path.moveTo(x, y) else path.lineTo(x, y)
                 }
-                drawPath(path, if (upload) upColor else downColor, style = Stroke(2.dp.toPx()))
+                drawPath(path, if (upload) upColor else downColor, style = Stroke(2.dp.toPx(),
+                    pathEffect = if (upload) PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 4.dp.toPx())) else null))
             }
         }
     }

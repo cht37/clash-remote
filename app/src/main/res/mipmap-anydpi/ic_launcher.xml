@@ -1,1 +1,6 @@
-<inset xmlns:android="http://schemas.android.com/apk/res/android" android:drawable="@drawable/ic_launcher" android:inset="0dp" />
+<!-- API 33+ monochrome artwork is supplied by the v33 resource variant. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:ignore="MonochromeLauncherIcon">
+    <background android:drawable="@color/launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>

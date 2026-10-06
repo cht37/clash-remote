@@ -19,10 +19,16 @@ private fun scheme(palette: AppPalette, dark: Boolean): ColorScheme {
         AppPalette.PURPLE -> if (dark) listOf(0xFFD7B6FF, 0xFF3D195B, 0xFF56306F, 0xFFF0DBFF) else listOf(0xFF6F42A5, 0xFFFFFFFF, 0xFFEEDCFF, 0xFF391763)
         AppPalette.ORANGE -> if (dark) listOf(0xFFF8B987, 0xFF512B0B, 0xFF6E411A, 0xFFFFE0C4) else listOf(0xFF975113, 0xFFFFFFFF, 0xFFFFDDBB, 0xFF472300)
     }.map { Color(it) }
+    val secondary = Color(when (palette) {
+        AppPalette.GREEN -> if (dark) 0xFFD0BCE5 else 0xFF6F527C
+        AppPalette.BLUE -> if (dark) 0xFFECC0A3 else 0xFF835A3D
+        AppPalette.PURPLE -> if (dark) 0xFFADCDBF else 0xFF446E5F
+        AppPalette.ORANGE -> if (dark) 0xFFAEC7E8 else 0xFF486B94
+    })
     val base = if (dark) darkColorScheme() else lightColorScheme()
     return base.copy(
         primary = colors[0], onPrimary = colors[1], primaryContainer = colors[2], onPrimaryContainer = colors[3],
-        secondary = colors[0], onSecondary = colors[1], secondaryContainer = colors[2], onSecondaryContainer = colors[3],
+        secondary = secondary, onSecondary = colors[1], secondaryContainer = colors[2], onSecondaryContainer = colors[3],
         tertiary = colors[0], onTertiary = colors[1], tertiaryContainer = colors[2], onTertiaryContainer = colors[3],
         surfaceTint = colors[0],
         background = Color(if (dark) 0xFF111720 else 0xFFF5F7F9), onBackground = Color(if (dark) 0xFFE3EAF2 else 0xFF18252A),
