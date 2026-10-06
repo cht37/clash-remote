@@ -58,6 +58,8 @@ chmod +x gradlew
 
 Debug APK：`app/build/outputs/apk/debug/app-debug.apk`。这是开发调试签名，正式发布需要自己的签名配置。
 
+仓库已配置 GitHub Actions：日常提交自动运行测试并构建 Debug APK；推送与 `versionName` 一致的 `v*` 标签后，自动构建正式签名的通用 APK 并发布 GitHub Release。签名 Secrets、密钥备份要求及发布步骤见 [自动构建与发行版](docs/releases.md)。
+
 无需 Android SDK 也可以运行网络与状态测试：
 
 ```powershell
