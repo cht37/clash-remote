@@ -1,0 +1,12 @@
+.codex/
+.gradle/
+.gradle-user-home/
+.kotlin/
+.idea/
+.tooling/
+.superpowers/
+local.properties
+**/build/
+*.iml
+*.jks
+*.keystore
