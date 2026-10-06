@@ -8,6 +8,9 @@ import com.clashremote.app.storage.AppearanceStore
 import com.clashremote.core.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
+import com.clashremote.app.widget.WidgetCoordinator
 
 class RemoteViewModel @JvmOverloads constructor(
     application: Application,
@@ -25,6 +28,13 @@ class RemoteViewModel @JvmOverloads constructor(
     val appearance = appearanceController.state
     private val updateController = UpdateController(viewModelScope, BuildConfig.VERSION_NAME, releaseSource)
     val updates = updateController.state
+    init {
+        viewModelScope.launch {
+            remote.filter { it.status == ConnectionStatus.ONLINE && !it.busy }
+                .map { it.mode to it.proxies }.distinctUntilChanged()
+                .collect { WidgetCoordinator.refreshAll(application) }
+        }
+    }
     fun setForeground(value: Boolean) {
         controller.setForeground(value)
         if (!value) { clearTest(); updateController.cancel() }

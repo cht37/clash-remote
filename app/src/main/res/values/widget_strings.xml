@@ -1,0 +1,15 @@
+<resources>
+    <string name="widget_name">Clash Remote · 代理控制</string>
+    <string name="widget_description">快速切换代理模式和节点</string>
+    <string name="widget_router">路由器</string>
+    <string name="widget_pending">待刷新</string>
+    <string name="widget_rule">规则</string>
+    <string name="widget_global">全局</string>
+    <string name="widget_direct">直连</string>
+    <string name="widget_refresh">刷新路由器状态</string>
+    <string name="widget_proxy_group">代理策略组</string>
+    <string name="widget_select_node">选择节点</string>
+    <string name="widget_select_group">选择策略组</string>
+    <string name="widget_group_button">策略组</string>
+    <string name="widget_dot">●</string>
+</resources>

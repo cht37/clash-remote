@@ -15,12 +15,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.clashremote.app.RemoteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun ClashRemoteApp(viewModel: RemoteViewModel) {
+@Composable fun ClashRemoteApp(viewModel: RemoteViewModel, initialPage: Int = 0) {
     val state by viewModel.remote.collectAsStateWithLifecycle()
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val appearance by viewModel.appearance.collectAsStateWithLifecycle()
     val updates by viewModel.updates.collectAsStateWithLifecycle()
-    var page by rememberSaveable { mutableIntStateOf(0) }
+    var page by rememberSaveable { mutableIntStateOf(initialPage.coerceIn(0, 3)) }
     var choseInitialPage by rememberSaveable { mutableStateOf(false) }
     var handledSaveRevision by rememberSaveable { mutableLongStateOf(0) }
     val snackbar = remember { SnackbarHostState() }

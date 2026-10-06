@@ -39,8 +39,8 @@ class SaveRouterUiTest {
         override fun traffic(): Flow<Traffic> = emptyFlow()
         override fun close() {}
     }
-    private fun launch(): RemoteViewModel {
-        val vm = RemoteViewModel(ApplicationProvider.getApplicationContext<Application>(), Store(), { Api() },
+    private fun launch(saved: RouterProfile? = null, initialPage: Int = 0): RemoteViewModel {
+        val vm = RemoteViewModel(ApplicationProvider.getApplicationContext<Application>(), Store().apply { profile = saved }, { Api() },
             object : AppearancePersistence {
                 override fun loadPalette(): String? = null
                 override fun savePalette(id: String) {}
@@ -48,7 +48,7 @@ class SaveRouterUiTest {
                 override suspend fun latest(): ReleaseInfo? = null
                 override fun close() {}
             }, Dispatchers.Unconfined)
-        compose.setContent { ClashRemoteTheme { ClashRemoteApp(vm) } }
+        compose.setContent { ClashRemoteTheme { ClashRemoteApp(vm, initialPage = initialPage) } }
         compose.waitForIdle()
         return vm
     }
@@ -70,5 +70,10 @@ class SaveRouterUiTest {
         compose.waitForIdle()
         compose.onNodeWithText("控制地址需为有效的 HTTP 或 HTTPS 地址").assertIsDisplayed()
         compose.onNodeWithText("保存并连接").assertExists()
+    }
+    @Test fun widgetSetupEntryOpensSettingsEvenWithSavedRouter() {
+        launch(RouterProfile("已保存", "http://192.168.1.1:9090"), initialPage = 3)
+        compose.onNodeWithText("Clash 控制地址").assertIsDisplayed()
+        compose.onNodeWithText("http://192.168.1.1:9090").assertExists()
     }
 }

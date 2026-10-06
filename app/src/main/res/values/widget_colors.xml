@@ -1,0 +1,9 @@
+<resources>
+    <color name="widget_surface">#F9FCFD</color>
+    <color name="widget_foreground">#18252A</color>
+    <color name="widget_secondary">#4A5966</color>
+    <color name="widget_button_idle">#EDF2F5</color>
+    <color name="widget_border">#DFE5E8</color>
+    <color name="widget_success">#186B52</color>
+    <color name="widget_error">#A3332B</color>
+</resources>
