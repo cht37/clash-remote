@@ -17,7 +17,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val vm = viewModel<RemoteViewModel>()
             val appearance by vm.appearance.collectAsStateWithLifecycle()
-            ClashRemoteTheme(appearance.palette) { ClashRemoteApp(vm) }
+            ClashRemoteTheme(appearance.palette) {
+                ClashRemoteApp(vm, initialPage = if (intent.getBooleanExtra("open_settings", false)) 3 else 0)
+            }
         }
     }
 }
