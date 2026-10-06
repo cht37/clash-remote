@@ -9,21 +9,25 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.clashremote.core.*
+import com.clashremote.app.BuildConfig
 
 @Composable fun SettingsScreen(
     state: SettingsState, test: () -> Unit, save: () -> Unit,
     clear: () -> Unit, draftChanged: (RouterProfile) -> Unit,
+    appearance: AppearanceState, selectPalette: (AppPalette) -> Unit,
+    updates: UpdateState, checkUpdates: () -> Unit,
 ) {
     val draft = state.draft
     var showSecret by remember { mutableStateOf(false) }
     var confirmClear by remember { mutableStateOf(false) }
     val enabled = state.loaded && !state.saving
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(Modifier.fillMaxSize().testTag("settings-list"), contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item { PageHeading("连接路由器", "手机与路由器连接到同一个局域网") }
         item {
             OutlinedTextField(draft.name, { draftChanged(draft.copy(name = it)) }, Modifier.fillMaxWidth(), enabled = enabled,
@@ -75,7 +79,11 @@ import com.clashremote.core.*
         if (state.profile != null) item {
             TextButton(onClick = { confirmClear = true }, enabled = enabled) { Text("清除本地配置", color = MaterialTheme.colorScheme.error) }
         }
-        item { Text("Clash Remote 0.1.0", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        item { HorizontalDivider() }
+        item { AppearanceSection(appearance, selectPalette) }
+        item { HorizontalDivider() }
+        item { UpdatesSection(updates, checkUpdates) }
+        item { Text("Clash Remote ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
     if (confirmClear) AlertDialog(onDismissRequest = { confirmClear = false }, title = { Text("清除路由器配置？") },
         text = { Text("手机上保存的地址和密钥将被删除。以后连接需要重新填写。") },

@@ -69,4 +69,30 @@ class SettingsControllerTest {
         assertFalse(controller.state.value.testBusy)
         assertTrue(controller.state.value.testMessage!!.contains("C-version"))
     }
+    @Test fun everySuccessfulSavePublishesRefreshEvenForTheSameProfile() = runTest {
+        val store = MemoryStore()
+        val connected = mutableListOf<RouterProfile>()
+        val controller = SettingsController(backgroundScope, store, connected::add, {}, StandardTestDispatcher(testScheduler)) { TestApi { "ok" } }
+        runCurrent()
+        assertEquals(0L, controller.state.value.saveRevision)
+        val draft = RouterProfile(" 新路由器 ", "http://192.168.1.2:9090", "secret")
+        controller.updateDraft(draft); controller.save(); runCurrent()
+        assertEquals(draft.validated(), store.stored)
+        assertEquals(draft.validated(), connected.last())
+        assertEquals(1L, controller.state.value.saveRevision)
+        controller.save(); runCurrent()
+        assertEquals(2L, controller.state.value.saveRevision)
+        controller.clear(); runCurrent()
+        controller.updateDraft(draft); controller.save(); runCurrent()
+        assertEquals(3L, controller.state.value.saveRevision)
+    }
+    @Test fun failedSaveDoesNotPublishSuccessfulRefresh() = runTest {
+        val store = MemoryStore().apply { failSave = true }
+        val controller = SettingsController(backgroundScope, store, {}, {}, StandardTestDispatcher(testScheduler)) { TestApi { "ok" } }
+        runCurrent()
+        controller.updateDraft(RouterProfile(endpoint = "http://192.168.1.2:9090"))
+        controller.save(); runCurrent()
+        assertEquals(0L, controller.state.value.saveRevision)
+        assertNotNull(controller.state.value.error)
+    }
 }

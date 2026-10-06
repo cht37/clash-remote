@@ -18,8 +18,12 @@ import com.clashremote.app.RemoteViewModel
 @Composable fun ClashRemoteApp(viewModel: RemoteViewModel) {
     val state by viewModel.remote.collectAsStateWithLifecycle()
     val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val appearance by viewModel.appearance.collectAsStateWithLifecycle()
+    val updates by viewModel.updates.collectAsStateWithLifecycle()
     var page by rememberSaveable { mutableIntStateOf(0) }
     var choseInitialPage by rememberSaveable { mutableStateOf(false) }
+    var handledSaveRevision by rememberSaveable { mutableLongStateOf(0) }
+    val snackbar = remember { SnackbarHostState() }
     val owner = LocalLifecycleOwner.current
     DisposableEffect(owner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -39,9 +43,19 @@ import com.clashremote.app.RemoteViewModel
             choseInitialPage = true
         }
     }
+    LaunchedEffect(settings.saveRevision) {
+        if (settings.saveRevision != handledSaveRevision) {
+            handledSaveRevision = settings.saveRevision
+            if (settings.saveRevision > 0) {
+                page = 0
+                snackbar.showSnackbar("路由器配置已保存")
+            }
+        }
+    }
     val titles = listOf("概览", "代理", "连接", "设置")
     val icons = listOf(Icons.Outlined.Dashboard, Icons.Outlined.Tune, Icons.Outlined.Lan, Icons.Outlined.Settings)
     Scaffold(Modifier.imePadding(), containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(title = { Text("Clash Remote", style = MaterialTheme.typography.titleLarge) }, actions = {
                 if (page != 3 && state.profile != null) {
@@ -74,7 +88,8 @@ import com.clashremote.app.RemoteViewModel
                     0 -> OverviewScreen(state, viewModel.controller, { page = 3 })
                     1 -> ProxiesScreen(state, viewModel.controller, { page = 3 })
                     2 -> ConnectionsScreen(state, viewModel.controller, { page = 3 })
-                    3 -> SettingsScreen(settings, viewModel::test, viewModel::save, viewModel::clear, viewModel::updateDraft)
+                    3 -> SettingsScreen(settings, viewModel::test, viewModel::save, viewModel::clear, viewModel::updateDraft,
+                        appearance, viewModel::selectPalette, updates, viewModel::checkUpdates)
                 }
             }
         }

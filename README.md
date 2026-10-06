@@ -1,6 +1,6 @@
 # Clash Remote
 
-[源代码](https://github.com/cht37/clash-remote) · [MIT License](LICENSE)
+[源代码](https://github.com/cht37/clash-remote) · [发行版](https://github.com/cht37/clash-remote/releases/latest) · [MIT License](LICENSE)
 
 通过原生 Android 界面管理路由器上的 Clash / Mihomo。在同一 Wi-Fi 或局域网中，填写控制 API 地址和密钥，即可使用。最低 Android 8.0。
 
@@ -10,6 +10,11 @@
 - 代理：策略组、当前节点、搜索、Selector 手动切换、节点与整组测速（最多 4 个并发）。
 - 连接：域名、来源 IP、协议、代理链、规则、流量；搜索、关闭单个或全部连接。
 - 设置：路由器地址、secret、测速地址、独立连接测试、保存并连接、清除本地配置。
+- 保存成功后自动进入概览，立即显示新路由器与连接状态，并提示配置已保存。
+- 配色：松绿、海蓝、鸢紫、琥珀四套配色，可即时切换并保存，深浅模式跟随系统。
+- 更新：在设置中获取 GitHub 最新正式发行版，显示版本和说明；有新版时提供 APK 下载链接，通过浏览器下载后由安卓系统确认安装。
+
+图标使用经典 Clash 猫咪，支持安卓自适应形状和 Android 13+ 主题图标。素材来源与许可证见 [第三方素材声明](THIRD_PARTY_NOTICES.md)。
 
 密钥使用 Android Keystore AES-GCM 加密保存，应用不备份配置。进入后台停止轮询和流量连接，回到前台重新连接。首版保存一个路由器配置。
 
@@ -41,14 +46,14 @@ App 修改路由器 Clash 的运行配置；手机流量是否经过代理取决
 Windows：
 
 ```powershell
-.\gradlew.bat :core:test :app:assembleDebug :app:lintDebug
+.\gradlew.bat :core:test :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
 ```
 
 macOS / Linux：
 
 ```sh
 chmod +x gradlew
-./gradlew :core:test :app:assembleDebug :app:lintDebug
+./gradlew :core:test :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
 ```
 
 Debug APK：`app/build/outputs/apk/debug/app-debug.apk`。这是开发调试签名，正式发布需要自己的签名配置。
@@ -74,6 +79,10 @@ target SDK 36 使用 INTERNET 权限访问局域网。未来升级至 target SDK
 ## 验证范围
 
 自动测试使用本地 MockWebServer 和受控 API 替身，不依赖真实路由器密钥。覆盖认证、路径编码、204、错误响应、实时流量、后台取消、会话替换、写操作失败、测速并发、密钥加密与损坏配置。
+
+Compose 界面回归测试使用 Robolectric，实际点击保存并验证自动进入概览、新路由器显示和非法地址错误。配色与更新检查的测试覆盖持久化、数字版本比较、暂无正式发行版、请求失败、取消和可信 APK 附件选择。测试不需要安卓模拟器；首次运行会下载测试依赖。
+
+更新检查使用公开的 `cht37/clash-remote` GitHub Releases API，不发送路由器密钥。仓库尚无正式发行版时显示“暂无正式发行版”，没有 APK 附件时提供发行页面入口。发布时使用 `v0.2.0` 这样的版本标签，并附加通用 APK；每次发布应同时递增 Android versionCode。
 
 真机和实际路由器连接需在你的局域网中验收：安装 APK，连接、切换模式、切换 Selector 节点、测速、查看连接、切到后台再返回，以及故意填写错误密钥验证错误提示。
 

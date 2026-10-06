@@ -4,15 +4,30 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.clashremote.app.storage.ProfileStore
+import com.clashremote.app.storage.AppearanceStore
 import com.clashremote.core.*
-class RemoteViewModel(application: Application) : AndroidViewModel(application) {
-    val controller = RemoteController(viewModelScope)
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+
+class RemoteViewModel @JvmOverloads constructor(
+    application: Application,
+    persistence: ProfilePersistence = ProfileStore(application),
+    routerFactory: (RouterProfile) -> ClashApi = { OkHttpClashApi(it) },
+    palettePersistence: AppearancePersistence = AppearanceStore(application),
+    releaseSource: ReleaseSource = GitHubReleaseClient(BuildConfig.VERSION_NAME),
+    io: CoroutineDispatcher = Dispatchers.IO,
+) : AndroidViewModel(application) {
+    val controller = RemoteController(viewModelScope, routerFactory)
     val remote = controller.state
-    private val settingsController = SettingsController(viewModelScope, ProfileStore(application), controller::connect, controller::disconnect)
+    private val settingsController = SettingsController(viewModelScope, persistence, controller::connect, controller::disconnect, io, routerFactory)
     val settings = settingsController.state
+    private val appearanceController = AppearanceController(viewModelScope, palettePersistence, io)
+    val appearance = appearanceController.state
+    private val updateController = UpdateController(viewModelScope, BuildConfig.VERSION_NAME, releaseSource)
+    val updates = updateController.state
     fun setForeground(value: Boolean) {
         controller.setForeground(value)
-        if (!value) clearTest()
+        if (!value) { clearTest(); updateController.cancel() }
     }
     fun dismissError() { controller.clearError(); settingsController.dismissError() }
     fun clearTest() = settingsController.clearTest()
@@ -20,5 +35,7 @@ class RemoteViewModel(application: Application) : AndroidViewModel(application) 
     fun test() = settingsController.test()
     fun save() = settingsController.save()
     fun clear() = settingsController.clear()
-    override fun onCleared() { controller.disconnect(); super.onCleared() }
+    fun selectPalette(palette: AppPalette) = appearanceController.select(palette)
+    fun checkUpdates() = updateController.check()
+    override fun onCleared() { controller.disconnect(); updateController.close(); super.onCleared() }
 }

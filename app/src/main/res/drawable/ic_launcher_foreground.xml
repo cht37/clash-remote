@@ -1,0 +1,4 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/clash_cat"
+    android:insetLeft="12%" android:insetTop="12%"
+    android:insetRight="12%" android:insetBottom="12%" />

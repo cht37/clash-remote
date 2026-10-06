@@ -16,7 +16,7 @@ try {
     if (-not $CoreOnly) {
         Set-Content -LiteralPath 'local.properties' -Value ('sdk.dir=' + $taskSdk.Replace('\','/')) -Encoding utf8
     }
-    $taskArguments = if ($CoreOnly) { @('-PcoreOnly', ':core:test') } else { @(':core:test', ':app:assembleDebug', ':app:lintDebug') }
+    $taskArguments = if ($CoreOnly) { @('-PcoreOnly', ':core:test') } else { @(':core:test', ':app:testDebugUnitTest', ':app:assembleDebug', ':app:lintDebug') }
     & $taskGradle @taskArguments --console=plain --no-daemon
     if ($LASTEXITCODE -ne 0) { throw "Gradle 构建失败（退出码 $LASTEXITCODE）" }
 } finally {

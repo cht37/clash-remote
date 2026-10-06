@@ -13,6 +13,7 @@ data class SettingsState(
     val profile: RouterProfile? = null, val draft: RouterProfile = RouterProfile(),
     val error: String? = null, val loaded: Boolean = false,
     val testBusy: Boolean = false, val testMessage: String? = null, val saving: Boolean = false,
+    val saveRevision: Long = 0,
 )
 
 class SettingsController(
@@ -27,6 +28,7 @@ class SettingsController(
     val state = mutable.asStateFlow()
     private var testJob: Job? = null
     private var testGeneration = 0L
+    private var saveRevision = 0L
     init {
         scope.launch {
             try {
@@ -79,8 +81,9 @@ class SettingsController(
             try {
                 val profile = draft.validated()
                 withContext(io) { persistence.save(profile) }
-                mutable.update { it.copy(profile = profile, draft = profile) }
                 onSaved(profile)
+                saveRevision++
+                mutable.update { it.copy(profile = profile, draft = profile, saveRevision = saveRevision) }
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) { mutable.update { it.copy(error = readable(e)) } }
             finally { mutable.update { it.copy(saving = false) } }
@@ -94,7 +97,7 @@ class SettingsController(
             try {
                 withContext(io) { persistence.clear() }
                 onCleared()
-                mutable.value = SettingsState(loaded = true)
+                mutable.value = SettingsState(loaded = true, saveRevision = saveRevision)
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) { mutable.update { it.copy(error = readable(e)) } }
             finally { mutable.update { it.copy(saving = false) } }
