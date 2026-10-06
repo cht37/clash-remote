@@ -3,6 +3,11 @@ plugins {
     kotlin("android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+val releaseKeystorePath = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+fun signingSecret(name: String): String = providers.environmentVariable(name).orNull
+    ?.takeIf { it.isNotBlank() }
+    ?: throw GradleException("Missing release signing environment variable: $name")
+
 android {
     namespace = "com.clashremote.app"
     compileSdk = 36
@@ -12,6 +17,23 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
+    }
+    signingConfigs {
+        if (!releaseKeystorePath.isNullOrBlank()) {
+            create("release") {
+                storeFile = file(releaseKeystorePath)
+                storePassword = signingSecret("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = signingSecret("ANDROID_KEY_ALIAS")
+                keyPassword = signingSecret("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            if (!releaseKeystorePath.isNullOrBlank()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
     buildFeatures { compose = true }
     compileOptions {
