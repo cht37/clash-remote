@@ -22,18 +22,18 @@ GitHub 自动提供发布所需的 `GITHUB_TOKEN`，无需另建 PAT。发布工
 
 ## 发布步骤
 
-1. 修改 `app/build.gradle.kts` 中的 `versionName`（例如 `0.3.0`），同时递增 `versionCode`。
+1. 修改 `app/build.gradle.kts` 中的 `versionName`（例如 `0.3.1`），同时递增 `versionCode`。
 2. 将变更合入 `main`，确认 Android CI 通过。
 3. 更新本地 `main` 后创建并推送同名版本标签：
 
    ```sh
    git switch main
    git pull --ff-only origin main
-   git tag v0.3.0
-   git push origin v0.3.0
+   git tag v0.3.1
+   git push origin v0.3.1
    ```
 
-标签必须为 `v主版本.次版本.修订版本`，并与 `versionName` 一致；本次发布版本为 `0.3.0`，versionCode 为 3。不要对旧版本创建内容不同的同名标签，也不要替换已发布 APK。
+标签必须为 `v主版本.次版本.修订版本`，并与 `versionName` 一致；本次发布版本为 `0.3.1`，versionCode 为 4。不要对旧版本创建内容不同的同名标签，也不要替换已发布 APK。
 
 构建成功后，发行版包含 `ClashRemote-<版本>-universal.apk` 和 `SHA256SUMS.txt`。工作流先创建草稿、上传附件，再公开发行版，避免更新检查读取到未上传 APK 的正式发行版。失败的草稿可通过 Actions 页面重新运行恢复；已公开发行版不可通过此工作流替换。
 

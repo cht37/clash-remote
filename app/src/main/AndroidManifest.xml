@@ -15,6 +15,18 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/proxy_widget_info" />
         </receiver>
+        <receiver android:name=".widget.SquareProxyWidgetProvider" android:exported="false" android:label="@string/widget_name_square">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/proxy_widget_square_info" />
+        </receiver>
+        <receiver android:name=".widget.SlimProxyWidgetProvider" android:exported="false" android:label="@string/widget_name_slim">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/proxy_widget_slim_info" />
+        </receiver>
+        <receiver android:name=".widget.LargeProxyWidgetProvider" android:exported="false" android:label="@string/widget_name_large">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/proxy_widget_large_info" />
+        </receiver>
         <activity android:name=".widget.WidgetConfigActivity" android:exported="true"
             android:excludeFromRecents="true" android:theme="@style/Theme.ClashRemote.Widget" android:windowSoftInputMode="adjustResize">
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>

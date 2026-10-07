@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingHorizontal="4dp" android:paddingVertical="1dp" android:background="@drawable/widget_background">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal" android:baselineAligned="false" android:gravity="center_vertical">
+        <FrameLayout android:id="@+id/widget_title_area" android:layout_width="20dp" android:layout_height="match_parent" android:background="?android:attr/selectableItemBackground" android:contentDescription="@string/app_name">
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_gravity="center" android:src="@drawable/ic_launcher_monochrome" android:tint="@color/widget_foreground" android:importantForAccessibility="no" />
+            <TextView style="@style/WidgetText.Group" android:id="@+id/widget_router" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/widget_node_area" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="4dp" android:background="?android:attr/selectableItemBackground">
+            <TextView style="@style/WidgetText.Node" android:id="@+id/widget_node" android:layout_width="match_parent" android:layout_height="match_parent" android:maxLines="1" android:gravity="center_vertical" android:text="@string/widget_select_node" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/widget_refresh" android:layout_width="20dp" android:layout_height="match_parent" android:background="?android:attr/selectableItemBackground" android:contentDescription="@string/widget_refresh">
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_gravity="center" android:src="@drawable/ic_widget_refresh" android:tint="@color/widget_foreground" android:importantForAccessibility="no" />
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal" android:baselineAligned="false" android:gravity="center_vertical">
+        <FrameLayout android:id="@+id/widget_configure" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="2dp" android:background="?android:attr/selectableItemBackground" android:contentDescription="@string/widget_select_group">
+            <TextView style="@style/WidgetText.Group" android:id="@+id/widget_label" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical" android:text="@string/widget_select_group" />
+        </FrameLayout>
+        <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_rule" android:layout_width="32dp" android:layout_height="match_parent" android:layout_marginEnd="1dp" android:text="@string/widget_rule" />
+        <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_global" android:layout_width="32dp" android:layout_height="match_parent" android:layout_marginEnd="1dp" android:text="@string/widget_global" />
+        <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_direct" android:layout_width="32dp" android:layout_height="match_parent" android:layout_marginEnd="1dp" android:text="@string/widget_direct" />
+        <TextView style="@style/WidgetText.Time" android:id="@+id/widget_time" android:layout_width="34dp" android:layout_height="match_parent" android:text="@string/widget_pending" />
+    </LinearLayout>
+    <TextView style="@style/WidgetText" android:id="@+id/widget_dot" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:text="@string/widget_dot" />
+    <TextView style="@style/WidgetText.Error" android:id="@+id/widget_detail" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" />
+</LinearLayout>

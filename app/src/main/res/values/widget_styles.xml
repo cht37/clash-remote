@@ -1,0 +1,50 @@
+<resources>
+    <style name="WidgetText">
+        <item name="android:includeFontPadding">true</item>
+    </style>
+    <style name="WidgetText.Node">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/widget_foreground</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">10sp</item>
+        <item name="android:autoSizeMaxTextSize">13sp</item>
+        <item name="android:autoSizeStepGranularity">1sp</item>
+    </style>
+    <style name="WidgetText.Group">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/widget_secondary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">10sp</item>
+        <item name="android:autoSizeMaxTextSize">11sp</item>
+        <item name="android:autoSizeStepGranularity">1sp</item>
+    </style>
+    <style name="WidgetText.Mode">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/widget_foreground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/widget_button</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">10sp</item>
+        <item name="android:autoSizeMaxTextSize">11sp</item>
+        <item name="android:autoSizeStepGranularity">1sp</item>
+    </style>
+    <style name="WidgetText.Time">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/widget_secondary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="WidgetText.Error">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/widget_error</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+</resources>

@@ -12,13 +12,13 @@
             <ImageView android:layout_width="18dp" android:layout_height="18dp" android:layout_gravity="center" android:src="@drawable/ic_widget_refresh" android:tint="@color/widget_foreground" android:importantForAccessibility="no" />
         </FrameLayout>
     </LinearLayout>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="26dp" android:layout_marginTop="2dp" android:orientation="horizontal" android:baselineAligned="false">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="24dp" android:layout_marginTop="2dp" android:orientation="horizontal" android:baselineAligned="false">
         <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_rule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="1dp" android:text="@string/widget_rule" />
         <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_global" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="1dp" android:text="@string/widget_global" />
         <TextView style="@style/WidgetText.Mode" android:id="@+id/widget_direct" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="1dp" android:text="@string/widget_direct" />
     </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="2dp" android:orientation="vertical" android:background="@drawable/widget_node_background" android:paddingHorizontal="4dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="2dp" android:orientation="vertical" android:background="@drawable/widget_node_background" android:paddingHorizontal="2dp">
         <FrameLayout android:id="@+id/widget_node_area" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="?android:attr/selectableItemBackground">
             <TextView style="@style/WidgetText.Node" android:id="@+id/widget_node" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical" android:text="@string/widget_select_node" />
         </FrameLayout>

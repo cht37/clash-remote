@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.first
 
 object WidgetCoordinator {
     const val PROVIDER = "com.clashremote.app.widget.ProxyWidgetProvider"
+    const val SQUARE_PROVIDER = "com.clashremote.app.widget.SquareProxyWidgetProvider"
+    const val SLIM_PROVIDER = "com.clashremote.app.widget.SlimProxyWidgetProvider"
+    const val LARGE_PROVIDER = "com.clashremote.app.widget.LargeProxyWidgetProvider"
+    private val providers = listOf(PROVIDER, SQUARE_PROVIDER, SLIM_PROVIDER, LARGE_PROVIDER)
     const val RENDER = "com.clashremote.app.widget.RENDER"
     const val CONTROL = "com.clashremote.app.widget.CONTROL"
     private const val TAG = "proxy-widgets"
@@ -17,9 +21,15 @@ object WidgetCoordinator {
     fun profileRevision(context: Context): String = context.getSharedPreferences("router", Context.MODE_PRIVATE)
         .getString("widget_revision", "legacy") ?: "legacy"
     fun render(context: Context, id: Int) {
-        context.sendBroadcast(Intent(RENDER).setComponent(ComponentName(context.packageName, PROVIDER))
+        val component = provider(context, id) ?: return
+        context.sendBroadcast(Intent(RENDER).setComponent(component)
             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id))
     }
+    fun provider(context: Context, id: Int): ComponentName? =
+        AppWidgetManager.getInstance(context).getAppWidgetInfo(id)?.provider?.takeIf {
+            it.packageName == context.packageName && it.className in providers
+        }
+    fun owns(context: Context, id: Int): Boolean = provider(context, id) != null
     private fun work(ticket: WidgetTicket, command: WidgetCommand): OneTimeWorkRequest {
         val input = Data.Builder().putInt("widgetId", ticket.widgetId).putString("bindingToken", ticket.bindingToken)
             .putString("profileRevision", ticket.profileRevision).putString("requestToken", ticket.requestToken)
@@ -64,8 +74,11 @@ object WidgetCoordinator {
         refreshAll(context)
     }
     fun appearanceChanged(context: Context) { installedIds(context).forEach { render(context, it) } }
-    fun installedIds(context: Context): IntArray = AppWidgetManager.getInstance(context)
-        .getAppWidgetIds(ComponentName(context.packageName, PROVIDER))
+    fun installedIds(context: Context): IntArray {
+        val manager = AppWidgetManager.getInstance(context)
+        return providers.flatMap { manager.getAppWidgetIds(ComponentName(context.packageName, it)).toList() }
+            .distinct().toIntArray()
+    }
     fun remove(context: Context, id: Int) {
         WidgetStore(context).remove(id)
         WorkManager.getInstance(context).cancelUniqueWork("proxy-widget-$id")

@@ -29,7 +29,7 @@ abstract class WidgetPickerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (configuring) setResult(RESULT_CANCELED)
         val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-        fun owned() = AppWidgetManager.getInstance(this).getAppWidgetInfo(id)?.provider?.className == WidgetCoordinator.PROVIDER
+        fun owned() = WidgetCoordinator.owns(this, id)
         val store = WidgetStore(this)
         val binding = store.binding(id)
         val expectedToken = intent.getStringExtra("bindingToken")

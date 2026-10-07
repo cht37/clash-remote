@@ -1,5 +1,9 @@
 <resources>
-    <string name="widget_name">Clash Remote · 代理控制</string>
+    <string name="widget_name">Clash Remote · 代理控制 4×2</string>
+    <string name="widget_name_square">Clash Remote · 代理控制 2×2</string>
+    <string name="widget_name_slim">Clash Remote · 代理控制 4×1</string>
+    <string name="widget_name_large">Clash Remote · 代理控制 4×3</string>
+    <string name="widget_group_short">组</string>
     <string name="widget_description">快速切换代理模式和节点</string>
     <string name="widget_router">路由器</string>
     <string name="widget_pending">待刷新</string>

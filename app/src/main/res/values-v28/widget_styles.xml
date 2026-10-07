@@ -1,0 +1,6 @@
+<resources>
+    <style name="WidgetText">
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:fallbackLineSpacing">true</item>
+    </style>
+</resources>

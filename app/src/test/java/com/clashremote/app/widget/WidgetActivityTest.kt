@@ -30,20 +30,25 @@ class WidgetActivityTest {
         assertNull(WidgetStore(context).binding(99))
         controller.destroy()
     }
-    @Test fun cancellingReconfigurationKeepsPreviousGroupAndToken() {
+    @Test fun cancellingReconfigurationKeepsPreviousGroupAndTokenForEverySize() {
         context.getSharedPreferences("widgets", Context.MODE_PRIVATE).edit().clear().commit()
         context.getSharedPreferences("router", Context.MODE_PRIVATE).edit().clear().commit()
-        val info = AppWidgetProviderInfo().apply {
-            provider = ComponentName(context, ProxyWidgetProvider::class.java)
-            initialLayout = R.layout.widget_proxy
+        listOf(ProxyWidgetProvider::class.java, SquareProxyWidgetProvider::class.java,
+            SlimProxyWidgetProvider::class.java, LargeProxyWidgetProvider::class.java).forEachIndexed { i, providerClass ->
+            val id = i + 7
+            val info = AppWidgetProviderInfo().apply {
+                provider = ComponentName(context, providerClass)
+                initialLayout = R.layout.widget_proxy
+            }
+            shadowOf(AppWidgetManager.getInstance(context)).addBoundWidget(id, info)
+            val old = WidgetStore(context).bind(id, "代理")
+            val intent = Intent(context, WidgetConfigActivity::class.java).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+            val controller = Robolectric.buildActivity(WidgetConfigActivity::class.java, intent).create()
+            assertFalse(controller.get().isFinishing)
+            controller.get().finish()
+            assertEquals(Activity.RESULT_CANCELED, shadowOf(controller.get()).resultCode)
+            assertEquals(old, WidgetStore(context).binding(id))
+            controller.destroy()
         }
-        shadowOf(AppWidgetManager.getInstance(context)).addBoundWidget(7, info)
-        val old = WidgetStore(context).bind(7, "代理")
-        val intent = Intent(context, WidgetConfigActivity::class.java).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 7)
-        val controller = Robolectric.buildActivity(WidgetConfigActivity::class.java, intent).create()
-        controller.get().finish()
-        assertEquals(Activity.RESULT_CANCELED, shadowOf(controller.get()).resultCode)
-        assertEquals(old, WidgetStore(context).binding(7))
-        controller.destroy()
     }
 }

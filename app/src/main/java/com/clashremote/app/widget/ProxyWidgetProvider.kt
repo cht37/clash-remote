@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.clashremote.core.WidgetCommand
 
-class ProxyWidgetProvider : AppWidgetProvider() {
+open class ProxyWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
         val runtime = WidgetRuntime.from(context)
         ids.forEach { id ->
@@ -48,3 +48,7 @@ class ProxyWidgetProvider : AppWidgetProvider() {
         WidgetRenderer.render(context, id)
     }
 }
+
+class SquareProxyWidgetProvider : ProxyWidgetProvider()
+class SlimProxyWidgetProvider : ProxyWidgetProvider()
+class LargeProxyWidgetProvider : ProxyWidgetProvider()

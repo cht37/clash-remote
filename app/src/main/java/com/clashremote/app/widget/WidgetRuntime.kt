@@ -1,6 +1,5 @@
 package com.clashremote.app.widget
 
-import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.clashremote.app.storage.ProfileStore
 import com.clashremote.core.*
@@ -25,8 +24,7 @@ class WidgetRuntime(
         fun from(context: Context): WidgetRuntime {
             val app = context.applicationContext
             return WidgetRuntime(WidgetStore(app), ProfileStore(app), { WidgetCoordinator.profileRevision(app) },
-                isInstalled = { id -> AppWidgetManager.getInstance(app).getAppWidgetInfo(id)?.provider?.className ==
-                    WidgetCoordinator.PROVIDER }, onRender = { WidgetCoordinator.render(app, it) })
+                isInstalled = { id -> WidgetCoordinator.owns(app, id) }, onRender = { WidgetCoordinator.render(app, it) })
         }
     }
     fun ticket(id: Int): WidgetTicket? {
